@@ -43,7 +43,10 @@ function Login() {
 
         {/* Form */}
 
-        <form className="mt-8 space-y-6">
+        <form
+          className="mt-8 space-y-6"
+          onSubmit={(e) => e.preventDefault()}
+        >
 
           {/* Username */}
 
@@ -103,19 +106,19 @@ function Login() {
 
             </label>
 
-            <button
-              type="/ForgotPassword"
+            <Link
+              to="/ForgotPassword"
               className="text-emerald-600 hover:underline"
             >
               Forgot Password?
-            </button>
+            </Link>
 
           </div>
 
           {/* Button */}
 
           <button
-            type="/"
+            type="submit"
             className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-xl font-semibold transition duration-300"
           >
             Sign In

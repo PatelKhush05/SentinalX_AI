@@ -1,34 +1,34 @@
+import { Outlet } from "react-router-dom";
+
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
-import WelcomeBanner from "../components/WelcomeBanner";
-import StatsCards from "../components/StatsCards";
-import TaskTable from "../components/TaskTable";
 import RightPanel from "../components/RightPanel";
 
-function Dashboard() {
+function DashboardLayout() {
   return (
     <div className="min-h-screen bg-slate-100 flex">
 
       {/* Sidebar */}
       <Sidebar />
 
-      {/* Main Content */}
+      {/* Main Section */}
       <div className="flex-1 flex">
 
-        <div className="flex-1 p-8">
+        {/* Center */}
+        <div className="flex-1 flex flex-col">
 
           <Navbar />
 
-          <WelcomeBanner />
-
-          <StatsCards />
-
-          <TaskTable />
+          <main className="flex-1 p-8">
+            <Outlet />
+          </main>
 
         </div>
 
         {/* Right Panel */}
-        <RightPanel />
+        <div className="w-80 bg-white border-l">
+          <RightPanel />
+        </div>
 
       </div>
 
@@ -36,4 +36,4 @@ function Dashboard() {
   );
 }
 
-export default Dashboard;
+export default DashboardLayout;
