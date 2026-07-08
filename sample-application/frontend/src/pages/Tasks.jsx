@@ -1,33 +1,19 @@
 import { FaPlus, FaSearch } from "react-icons/fa";
-
-const tasks = [
-  {
-    id: 1,
-    title: "React Assignment",
-    priority: "High",
-    status: "Pending",
-  },
-  {
-    id: 2,
-    title: "DevOps Notes",
-    priority: "Medium",
-    status: "Completed",
-  },
-  {
-    id: 3,
-    title: "AWS Revision",
-    priority: "High",
-    status: "Pending",
-  },
-  {
-    id: 4,
-    title: "Database Project",
-    priority: "Low",
-    status: "In Progress",
-  },
-];
+import { useState } from "react";
+import { useTasks } from "../context/TaskContext";
+import AddTaskModal from "../components/AddTaskModal";
 
 function Tasks() {
+
+  // Modal State
+  const [showModal, setShowModal] = useState(false);
+
+  // Tasks State
+  const {
+  tasks,
+  addTask,
+} = useTasks();
+
   return (
     <div>
 
@@ -47,7 +33,10 @@ function Tasks() {
 
         </div>
 
-        <button className="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-3 rounded-xl flex items-center gap-2">
+        <button
+          onClick={() => setShowModal(true)}
+          className="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-3 rounded-xl flex items-center gap-2"
+        >
 
           <FaPlus />
 
@@ -75,47 +64,109 @@ function Tasks() {
 
       <div className="grid gap-5 mt-8">
 
-        {tasks.map((task) => (
+     {tasks.map((task) => (
 
-          <div
-            key={task.id}
-            className="bg-white rounded-2xl shadow p-6 flex justify-between items-center hover:shadow-lg transition"
+  <div
+    key={task.id}
+    className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition"
+  >
+
+    <div className="flex justify-between">
+
+      <div>
+
+        <h2 className="text-xl font-bold">
+
+          {task.title}
+
+        </h2>
+
+        <div className="flex gap-3 mt-4">
+
+          <span className="bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-sm">
+
+            {task.category || "General"}
+
+          </span>
+
+          <span
+            className={`px-3 py-1 rounded-full text-sm ${
+              task.priority === "High"
+                ? "bg-red-100 text-red-600"
+                : task.priority === "Medium"
+                ? "bg-yellow-100 text-yellow-700"
+                : "bg-green-100 text-green-600"
+            }`}
           >
 
-            <div>
+            {task.priority}
 
-              <h2 className="font-bold text-lg">
-                {task.title}
-              </h2>
+          </span>
 
-              <div className="flex gap-3 mt-3">
+          <span className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">
 
-                <span className="bg-red-100 text-red-600 px-3 py-1 rounded-full text-sm">
+            {task.status}
 
-                  {task.priority}
+          </span>
 
-                </span>
+        </div>
 
-                <span className="bg-yellow-100 text-yellow-600 px-3 py-1 rounded-full text-sm">
+        <p className="text-gray-500 mt-4">
 
-                  {task.status}
+          {task.description || "No description"}
 
-                </span>
+        </p>
 
-              </div>
+        <p className="text-sm text-gray-400 mt-2">
 
-            </div>
+          📅 {task.dueDate || "No Due Date"}
 
-            <input
-              type="checkbox"
-              className="w-6 h-6 accent-emerald-600"
-            />
-
-          </div>
-
-        ))}
+        </p>
 
       </div>
+
+      <input
+        type="checkbox"
+        className="w-6 h-6 accent-emerald-600"
+      />
+
+    </div>
+
+    <div className="flex gap-4 mt-6">
+
+      <button className="bg-blue-500 hover:bg-blue-600 text-white px-5 py-2 rounded-lg">
+
+        ✏ Edit
+
+      </button>
+
+      <button className="bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded-lg">
+
+        🗑 Delete
+
+      </button>
+
+    </div>
+
+  </div>
+
+))}
+
+      </div>
+
+      {/* Modal */}
+
+      {showModal && (
+
+       <AddTaskModal
+  onClose={() => setShowModal(false)}
+  onSave={(task) => {
+    addTask(task);
+    setShowModal(false);
+  }}
+/>
+
+      )}
 
     </div>
   );

@@ -35,7 +35,7 @@ const tasks = [
   },
 ];
 
-function TaskTable() {
+function TaskTable({ onNewTask })  {
   return (
     <div className="bg-white rounded-2xl shadow p-6 mt-6">
 
@@ -47,14 +47,16 @@ function TaskTable() {
           Recent Tasks
         </h2>
 
-        <button className="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2 rounded-xl flex items-center gap-2">
+        <button
+  onClick={onNewTask}
+  className="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2 rounded-xl flex items-center gap-2 transition"
+>
 
-          <FaPlus />
+  <FaPlus />
 
-          New Task
+  New Task
 
-        </button>
-
+</button>
       </div>
 
       {/* Table */}
