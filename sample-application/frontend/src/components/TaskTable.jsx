@@ -4,38 +4,12 @@ import {
   FaPlus,
 } from "react-icons/fa";
 
-const tasks = [
-  {
-    id: 1,
-    title: "React Assignment",
-    priority: "High",
-    status: "Pending",
-    dueDate: "10 Jul 2026",
-  },
-  {
-    id: 2,
-    title: "DevOps Notes",
-    priority: "Medium",
-    status: "Completed",
-    dueDate: "08 Jul 2026",
-  },
-  {
-    id: 3,
-    title: "Database Project",
-    priority: "High",
-    status: "Pending",
-    dueDate: "15 Jul 2026",
-  },
-  {
-    id: 4,
-    title: "UI Design",
-    priority: "Low",
-    status: "Completed",
-    dueDate: "05 Jul 2026",
-  },
-];
+import { useTasks } from "../context/TaskContext";
 
-function TaskTable({ onNewTask })  {
+function TaskTable({ onNewTask }) {
+
+  const { tasks } = useTasks();
+
   return (
     <div className="bg-white rounded-2xl shadow p-6 mt-6">
 
@@ -48,15 +22,16 @@ function TaskTable({ onNewTask })  {
         </h2>
 
         <button
-  onClick={onNewTask}
-  className="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2 rounded-xl flex items-center gap-2 transition"
->
+          onClick={onNewTask}
+          className="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2 rounded-xl flex items-center gap-2 transition"
+        >
 
-  <FaPlus />
+          <FaPlus />
 
-  New Task
+          New Task
 
-</button>
+        </button>
+
       </div>
 
       {/* Table */}
@@ -98,7 +73,7 @@ function TaskTable({ onNewTask })  {
 
               <td>{task.status}</td>
 
-              <td>{task.dueDate}</td>
+              <td>{task.dueDate || "No Due Date"}</td>
 
               <td>
 

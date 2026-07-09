@@ -7,20 +7,24 @@ import StatsCards from "../components/StatsCards";
 import TaskTable from "../components/TaskTable";
 import RightPanel from "../components/RightPanel";
 import AddTaskModal from "../components/AddTaskModal";
+import { useTasks } from "../context/TaskContext";
 
 function Dashboard() {
 
   // Modal State
   const [showModal, setShowModal] = useState(false);
+  const { addTask } = useTasks();
 
   // Temporary Save Function
-  const handleAddTask = (task) => {
+const handleAddTask = (task) => {
 
-    console.log("New Task :", task);
+    addTask(task);
 
     setShowModal(false);
 
-  };
+};
+
+
 
   return (
 

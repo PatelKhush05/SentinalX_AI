@@ -34,20 +34,26 @@ export function TaskProvider({ children }) {
     },
   ]);
 
-  // Add Task
-  const addTask = (task) => {
+ const addTask = (task) => {
 
-    setTasks((prev) => [
+  console.log("Task Received:", task);
+
+  setTasks((prev) => {
+    const updatedTasks = [
       ...prev,
       {
         id: Date.now(),
         ...task,
         status: "Pending",
       },
-    ]);
+    ];
 
-  };
+    console.log("Updated Tasks:", updatedTasks);
 
+    return updatedTasks;
+  });
+
+};
   // Delete Task
   const deleteTask = (id) => {
 
