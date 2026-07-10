@@ -1,14 +1,20 @@
 import { useState } from "react";
 
-function AddTaskModal({ onClose, onSave }) {
+function AddTaskModal({
+  onClose,
+  onSave,
+  initialData = null,
+})  {
 
-  const [task, setTask] = useState({
+const [task, setTask] = useState(
+  initialData || {
     title: "",
     priority: "Medium",
     category: "Study",
     dueDate: "",
     description: "",
-  });
+  }
+);
 
   const handleChange = (e) => {
 
@@ -39,11 +45,11 @@ function AddTaskModal({ onClose, onSave }) {
 
         {/* Heading */}
 
-        <h2 className="text-3xl font-bold mb-8">
+       <h2 className="text-3xl font-bold mb-8">
 
-          Create New Task
+  {initialData ? "Edit Task" : "Create New Task"}
 
-        </h2>
+</h2>
 
         {/* Title */}
 
@@ -177,7 +183,7 @@ function AddTaskModal({ onClose, onSave }) {
             className="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-xl"
           >
 
-            Save Task
+          {initialData ? "Update Task" : "Save Task"}
 
           </button>
 

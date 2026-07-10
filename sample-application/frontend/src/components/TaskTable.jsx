@@ -6,9 +6,16 @@ import {
 
 import { useTasks } from "../context/TaskContext";
 
-function TaskTable({ onNewTask }) {
+function TaskTable({
+  onNewTask,
+  onEditTask,
+  onDeleteTask,
+}) {
 
-  const { tasks } = useTasks();
+  const {
+  tasks,
+  toggleTaskStatus,
+} = useTasks();
 
   return (
     <div className="bg-white rounded-2xl shadow p-6 mt-6">
@@ -42,17 +49,19 @@ function TaskTable({ onNewTask }) {
 
           <tr className="text-left border-b">
 
-            <th className="py-3">Task</th>
+  <th className="py-3 w-12"></th>
 
-            <th>Priority</th>
+  <th>Task</th>
 
-            <th>Status</th>
+  <th>Priority</th>
 
-            <th>Due Date</th>
+  <th>Status</th>
 
-            <th>Actions</th>
+  <th>Due Date</th>
 
-          </tr>
+  <th>Actions</th>
+
+</tr>
 
         </thead>
 
@@ -64,10 +73,27 @@ function TaskTable({ onNewTask }) {
               key={task.id}
               className="border-b hover:bg-slate-50"
             >
+<td className="py-4">
 
-              <td className="py-4 font-medium">
-                {task.title}
-              </td>
+  <input
+    type="checkbox"
+    checked={task.status === "Completed"}
+    onChange={() => toggleTaskStatus(task.id)}
+    className="w-5 h-5 accent-emerald-600 cursor-pointer"
+  />
+
+</td>
+              <td
+  className={`py-4 font-medium ${
+    task.status === "Completed"
+      ? "line-through text-gray-400"
+      : ""
+  }`}
+>
+
+  {task.title}
+
+</td>
 
               <td>{task.priority}</td>
 
@@ -79,17 +105,23 @@ function TaskTable({ onNewTask }) {
 
                 <div className="flex gap-4">
 
-                  <button className="text-blue-600 hover:text-blue-800">
+                 <button
+  onClick={() => onEditTask(task)}
+  className="text-blue-600 hover:text-blue-800"
+>
 
-                    <FaEdit />
+  <FaEdit />
 
-                  </button>
+</button>
 
-                  <button className="text-red-600 hover:text-red-800">
+                <button
+  onClick={() => onDeleteTask(task.id)}
+  className="text-red-600 hover:text-red-800"
+>
 
-                    <FaTrash />
+  <FaTrash />
 
-                  </button>
+</button>
 
                 </div>
 

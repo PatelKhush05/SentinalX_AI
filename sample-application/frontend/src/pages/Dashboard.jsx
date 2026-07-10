@@ -13,14 +13,32 @@ function Dashboard() {
 
   // Modal State
   const [showModal, setShowModal] = useState(false);
-  const { addTask } = useTasks();
+  const [selectedTask, setSelectedTask] = useState(null);
+const {
+  addTask,
+  editTask,
+  deleteTask,
+} = useTasks();
 
   // Temporary Save Function
-const handleAddTask = (task) => {
+const handleSaveTask = (task) => {
+
+  if (selectedTask) {
+
+    editTask({
+      ...task,
+      id: selectedTask.id,
+      status: selectedTask.status,
+    });
+
+  } else {
 
     addTask(task);
 
-    setShowModal(false);
+  }
+
+  setSelectedTask(null);
+  setShowModal(false);
 
 };
 
@@ -45,10 +63,27 @@ const handleAddTask = (task) => {
           <WelcomeBanner />
 
           <StatsCards />
+<TaskTable
+  onNewTask={() => {
+    setSelectedTask(null);
+    setShowModal(true);
+  }}
+  onEditTask={(task) => {
+    setSelectedTask(task);
+    setShowModal(true);
+  }}
+  onDeleteTask={(id) => {
 
-          <TaskTable
-            onNewTask={() => setShowModal(true)}
-          />
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this task?"
+    );
+
+    if (confirmDelete) {
+      deleteTask(id);
+    }
+
+  }}
+/>
 
         </div>
 
@@ -62,10 +97,14 @@ const handleAddTask = (task) => {
 
       {showModal && (
 
-        <AddTaskModal
-          onClose={() => setShowModal(false)}
-          onSave={handleAddTask}
-        />
+       <AddTaskModal
+  initialData={selectedTask}
+  onClose={() => {
+    setShowModal(false);
+    setSelectedTask(null);
+  }}
+  onSave={handleSaveTask}
+/>
 
       )}
 

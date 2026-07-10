@@ -8,10 +8,14 @@ function Tasks() {
   // Modal State
   const [showModal, setShowModal] = useState(false);
 
+  const [selectedTask, setSelectedTask] = useState(null);
   // Tasks State
-  const {
+const {
   tasks,
   addTask,
+  editTask,
+  deleteTask,
+  toggleTaskStatus,
 } = useTasks();
 
   return (
@@ -34,7 +38,10 @@ function Tasks() {
         </div>
 
         <button
-          onClick={() => setShowModal(true)}
+          onClick={() => {
+  setSelectedTask(null);
+  setShowModal(true);
+}}
           className="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-3 rounded-xl flex items-center gap-2"
         >
 
@@ -132,21 +139,43 @@ function Tasks() {
 
     </div>
 
-    <div className="flex gap-4 mt-6">
+  <div className="flex gap-3 mt-6">
 
-      <button className="bg-blue-500 hover:bg-blue-600 text-white px-5 py-2 rounded-lg">
+  <button
+    onClick={() => {
+      setSelectedTask(task);
+      setShowModal(true);
+    }}
+    className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg"
+  >
+    ✏ Edit
+  </button>
 
-        ✏ Edit
+  <button
+    onClick={() => {
+      if (window.confirm("Delete this task?")) {
+        deleteTask(task.id);
+      }
+    }}
+    className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg"
+  >
+    🗑 Delete
+  </button>
 
-      </button>
+  <button
+    onClick={() => toggleTaskStatus(task.id)}
+    className={`px-4 py-2 rounded-lg text-white ${
+      task.status === "Completed"
+        ? "bg-yellow-500 hover:bg-yellow-600"
+        : "bg-green-600 hover:bg-green-700"
+    }`}
+  >
+    {task.status === "Completed"
+      ? "↩ Mark Pending"
+      : "✅ Complete"}
+  </button>
 
-      <button className="bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded-lg">
-
-        🗑 Delete
-
-      </button>
-
-    </div>
+</div>
 
   </div>
 
@@ -158,14 +187,33 @@ function Tasks() {
 
       {showModal && (
 
-       <AddTaskModal
-  onClose={() => setShowModal(false)}
-  onSave={(task) => {
-    addTask(task);
+<AddTaskModal
+  initialData={selectedTask}
+  onClose={() => {
     setShowModal(false);
+    setSelectedTask(null);
+  }}
+  onSave={(task) => {
+
+    if (selectedTask) {
+
+      editTask({
+        ...task,
+        id: selectedTask.id,
+        status: selectedTask.status,
+      });
+
+    } else {
+
+      addTask(task);
+
+    }
+
+    setSelectedTask(null);
+    setShowModal(false);
+
   }}
 />
-
       )}
 
     </div>
