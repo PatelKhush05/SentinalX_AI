@@ -1,7 +1,54 @@
 import { FaUser, FaLock, FaEye } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { login } from "../services/authService";
 
 function Login() {
+  const navigate = useNavigate();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const savedEmail = localStorage.getItem("signupEmail");
+
+    if (savedEmail) {
+      setEmail(savedEmail);
+    }
+  }, []);
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+
+    setError("");
+
+    if (!email || !password) {
+      setError("Please enter email and password.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      console.log("Email from UI:", email);
+      console.log("Password from UI:", password);
+
+      navigate("/Dashboard");
+
+    } catch (err) {
+
+      setError(err.message || "Login failed.");
+
+    } finally {
+
+      setLoading(false);
+
+    }
+  };
+
   return (
     <div className="min-h-screen bg-slate-100 flex items-center justify-center px-4">
 
@@ -45,15 +92,13 @@ function Login() {
 
         <form
           className="mt-8 space-y-6"
-          onSubmit={(e) => e.preventDefault()}
+          onSubmit={handleLogin}
         >
-
-          {/* Username */}
 
           <div>
 
             <label className="block mb-2 font-medium text-gray-700">
-              Username / Email
+              Email
             </label>
 
             <div className="flex items-center border rounded-xl px-4 py-3">
@@ -61,16 +106,16 @@ function Login() {
               <FaUser className="text-gray-400" />
 
               <input
-                type="text"
-                placeholder="Enter username or email"
+                type="email"
+                placeholder="Enter your email"
                 className="w-full ml-3 outline-none"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
 
             </div>
 
           </div>
-
-          {/* Password */}
 
           <div>
 
@@ -86,6 +131,8 @@ function Login() {
                 type="password"
                 placeholder="Enter password"
                 className="w-full ml-3 outline-none"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
 
               <FaEye className="text-gray-500 cursor-pointer" />
@@ -94,7 +141,11 @@ function Login() {
 
           </div>
 
-          {/* Remember */}
+          {error && (
+            <p className="text-red-500 text-sm">
+              {error}
+            </p>
+          )}
 
           <div className="flex justify-between items-center text-sm">
 
@@ -115,18 +166,15 @@ function Login() {
 
           </div>
 
-          {/* Button */}
-
           <button
             type="submit"
-            className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-xl font-semibold transition duration-300"
+            disabled={loading}
+            className="w-full bg-emerald-600 hover:bg-emerald-700 disabled:bg-gray-400 text-white py-3 rounded-xl font-semibold transition duration-300"
           >
-            Sign In
+            {loading ? "Signing In..." : "Sign In"}
           </button>
 
         </form>
-
-        {/* Divider */}
 
         <div className="flex items-center my-8">
 
@@ -140,8 +188,6 @@ function Login() {
 
         </div>
 
-        {/* Sign Up */}
-
         <p className="text-center text-gray-600">
 
           Don't have an account?
@@ -154,8 +200,6 @@ function Login() {
           </Link>
 
         </p>
-
-        {/* Footer */}
 
         <p className="mt-8 text-center text-gray-400 text-sm">
           © 2026 TaskFlow

@@ -11,6 +11,7 @@ import Projects from "../pages/Projects";
 import Analytics from "../pages/Analytics";
 import Categories from "../pages/Categories";
 import Settings from "../pages/Settings";
+import VerifyAccount from "../pages/VerifyAccount";
 
 function AppRoutes() {
   return (
@@ -21,7 +22,10 @@ function AppRoutes() {
         <Route path="/" element={<Login />} />
 
         <Route path="/SignUp" element={<SignUp />} />
-
+        <Route
+                   path="/VerifyAccount"
+                   element={<VerifyAccount />}
+        />
         <Route
           path="/ForgotPassword"
           element={<ForgotPassword />}
@@ -36,6 +40,7 @@ function AppRoutes() {
           path="*"
           element={<NotFound />}
         />
+
        <Route path="/tasks" element={<Tasks />} />
 
        <Route path="/calendar" element={<Calendar />} />
