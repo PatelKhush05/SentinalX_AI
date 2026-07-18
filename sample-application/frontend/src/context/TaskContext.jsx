@@ -1,76 +1,59 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
+import {
+  getTasks,
+  createTask,
+  updateTask,
+  deleteTask as deleteTaskApi,
+} from "../api/taskApi";
 
 const TaskContext = createContext();
 
 export function TaskProvider({ children }) {
 
-  const [tasks, setTasks] = useState([
-    {
-      id: 1,
-      title: "React Assignment",
-      priority: "High",
-      category: "Study",
-      status: "Pending",
-      dueDate: "2026-07-10",
-      description: "Complete React project",
-    },
-    {
-      id: 2,
-      title: "DevOps Notes",
-      priority: "Medium",
-      category: "Work",
-      status: "Completed",
-      dueDate: "2026-07-08",
-      description: "Revise Docker & Jenkins",
-    },
-    {
-      id: 3,
-      title: "AWS Revision",
-      priority: "High",
-      category: "Cloud",
-      status: "Pending",
-      dueDate: "2026-07-15",
-      description: "Prepare for AWS exam",
-    },
-  ]);
+const [tasks, setTasks] = useState([]);
+useEffect(() => {
+  loadTasks();
+}, []);
 
- const addTask = (task) => {
+const loadTasks = async () => {
+  try {
+    const response = await getTasks();
+    setTasks(response.data);
+  } catch (error) {
+    console.error("Failed to load tasks:", error);
+  }
+};
 
-  console.log("Task Received:", task);
+const addTask = async (task) => {
+  try {
+    await createTask(task);
 
-  setTasks((prev) => {
-    const updatedTasks = [
-      ...prev,
-      {
-        id: Date.now(),
-        ...task,
-        status: "Pending",
-      },
-    ];
+    // Reload tasks from the database
+    loadTasks();
 
-    console.log("Updated Tasks:", updatedTasks);
-
-    return updatedTasks;
-  });
-
+  } catch (error) {
+    console.error("Failed to create task:", error);
+  }
 };
   // Delete Task
-  const deleteTask = (id) => {
-
-    setTasks((prev) => prev.filter((task) => task.id !== id));
-
-  };
+ const deleteTask = async (id) => {
+  try {
+    await deleteTaskApi(id);
+    loadTasks();
+  } catch (error) {
+    console.error("Failed to delete task:", error);
+  }
+};
 
   // Edit Task
-  const editTask = (updatedTask) => {
-
-    setTasks((prev) =>
-      prev.map((task) =>
-        task.id === updatedTask.id ? updatedTask : task
-      )
-    );
-
-  };
+const editTask = async (updatedTask) => {
+  try {
+    await updateTask(updatedTask.id, updatedTask);
+    loadTasks();
+  } catch (error) {
+    console.error("Failed to update task:", error);
+  }
+};;
 
   // Complete Task
   const toggleTaskStatus = (id) => {
