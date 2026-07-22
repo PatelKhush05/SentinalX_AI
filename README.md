@@ -19,9 +19,9 @@ An AI-powered Self-Healing DevOps Platform.
 ## Current Progress
 
 - [x] Authentication UI
-- [ ] Dashboard
-- [ ] Backend APIs
-- [ ] Docker
+- [x] Dashboard
+- [x] Backend APIs
+- [x] Docker
 - [ ] Jenkins
 - [ ] Monitoring
 - [ ] AI Agent
