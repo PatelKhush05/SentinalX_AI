@@ -10,7 +10,6 @@ router = APIRouter(
     tags=["Tasks"]
 )
 
-
 @router.post("/", response_model=TaskResponse)
 def create_task(task: TaskCreate, db: Session = Depends(get_db)):
 
@@ -19,6 +18,7 @@ def create_task(task: TaskCreate, db: Session = Depends(get_db)):
         description=task.description,
         priority=task.priority,
         status=task.status,
+        due_date=task.due_date,
         user_id=1
     )
 
@@ -27,7 +27,6 @@ def create_task(task: TaskCreate, db: Session = Depends(get_db)):
     db.refresh(new_task)
 
     return new_task
-
 
 @router.get("/", response_model=list[TaskResponse])
 def get_tasks(db: Session = Depends(get_db)):

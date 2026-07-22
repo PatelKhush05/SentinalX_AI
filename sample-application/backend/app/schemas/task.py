@@ -8,6 +8,7 @@ class TaskCreate(BaseModel):
     description: Optional[str] = None
     priority: str = "Medium"
     status: str = "Pending"
+    due_date: Optional[datetime] = None
 
 
 class TaskUpdate(BaseModel):
@@ -15,6 +16,7 @@ class TaskUpdate(BaseModel):
     description: Optional[str] = None
     priority: Optional[str] = None
     status: Optional[str] = None
+    due_date: Optional[datetime] = None
 
 
 class TaskResponse(BaseModel):
@@ -23,6 +25,7 @@ class TaskResponse(BaseModel):
     description: Optional[str]
     priority: str
     status: str
+    due_date: Optional[datetime]
     created_at: datetime
 
     class Config:

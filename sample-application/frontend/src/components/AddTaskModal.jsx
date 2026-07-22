@@ -11,7 +11,7 @@ const [task, setTask] = useState(
     title: "",
     priority: "Medium",
     category: "Study",
-    dueDate: "",
+    due_date: "",
     description: "",
   }
 );
@@ -136,8 +136,8 @@ const [task, setTask] = useState(
 
           <input
             type="date"
-            name="dueDate"
-            value={task.dueDate}
+            name="due_date"
+            value={task.due_date}
             onChange={handleChange}
             className="w-full border rounded-xl p-3"
           />

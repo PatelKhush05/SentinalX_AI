@@ -99,7 +99,11 @@ function TaskTable({
 
               <td>{task.status}</td>
 
-              <td>{task.dueDate || "No Due Date"}</td>
+              <td>
+  {task.due_date
+    ? task.due_date.split("T")[0]
+    : "No Due Date"}
+</td> 
 
               <td>
 
