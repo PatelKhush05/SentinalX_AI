@@ -1,11 +1,7 @@
-version: "3.9"
-
 services:
-
   postgres:
     image: postgres:16
     container_name: taskflow-postgres
-    restart: always
 
     environment:
       POSTGRES_USER: taskflow
@@ -18,11 +14,16 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U taskflow -d taskflow_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
   backend:
     build: ./backend
     container_name: taskflow-backend
-
-    restart: always
 
     ports:
       - "8000:8000"
@@ -31,19 +32,23 @@ services:
       - ./backend/.env
 
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
+
+    restart: unless-stopped
 
   frontend:
     build: ./frontend
     container_name: taskflow-frontend
 
-    restart: always
-
     ports:
       - "5173:5173"
 
     depends_on:
-      - backend
+      backend:
+        condition: service_started
+
+    restart: unless-stopped
 
 volumes:
   postgres_data:
