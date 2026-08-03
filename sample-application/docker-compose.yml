@@ -21,6 +21,24 @@ services:
       retries: 5
       start_period: 15s
 
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+
+    ports:
+      - "11434:11434"
+
+    volumes:
+      - ollama_data:/root/.ollama
+
+    restart: unless-stopped
+
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 20s
+      timeout: 10s
+      retries: 10
+
   backend:
     build: ./backend
     container_name: taskflow-backend
@@ -30,10 +48,15 @@ services:
 
     env_file:
       - ./backend/.env
-
+    
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      
     depends_on:
       postgres:
         condition: service_healthy
+      ollama:
+        condition: service_started
 
     restart: unless-stopped
 
@@ -50,5 +73,34 @@ services:
 
     restart: unless-stopped
 
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+
+    ports:
+      - "9090:9090"
+
+    volumes:
+      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+
+    depends_on:
+      backend:
+        condition: service_started
+
+    restart: unless-stopped
+
+  node-exporter:
+    image: prom/node-exporter:latest
+    container_name: node-exporter
+
+    ports:
+      - "9100:9100"
+
+    restart: unless-stopped
+
 volumes:
   postgres_data:
+  ollama_data:

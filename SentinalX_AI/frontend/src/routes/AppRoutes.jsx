@@ -17,7 +17,7 @@ function AppRoutes() {
       <Routes>
        <Route path="/" element={<DashboardLayout />}>
            <Route index element={<Overview />} />
-           <Route path="applications" element={<Applications />} />
+          <Route path="/applications" element={<Applications />} />
            <Route path="cicd" element={<CICD />} />
            <Route path="monitoring" element={<Monitoring />} />
            <Route path="incidents" element={<Incidents />} />
