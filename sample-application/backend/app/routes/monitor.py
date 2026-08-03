@@ -15,10 +15,4 @@ def scan_infrastructure(db: Session = Depends(get_db)):
 
     detector = IncidentDetector(db)
 
-    result = detector.scan()
-
-    return {
-        "message": "Infrastructure scan completed.",
-        "created_incidents": result["created"],
-        "resolved_incidents": result["resolved"],
-    }
+    return detector.scan()
